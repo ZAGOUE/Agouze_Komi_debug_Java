@@ -3,45 +3,57 @@ package com.hemebiotech.analytics;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
- *
+ * implementation of ISymptomReader for read symptoms data in the file
  *
  */
 public class ReadSymptomDataFromFile implements ISymptomReader {
 
-	private String filepath;
-	
+	private final String fileName;
+
+
+    /**
+     * @param fileName the file who contain the list of symptoms
+     */
+
+
+    public ReadSymptomDataFromFile(String fileName) {
+
+		this.fileName = "symptoms.txt";
+
+    }
+
+
 	/**
-	 * 
-	 * @param filepath a full or partial path to file with symptom strings in it, one per line
+	 *
+	 * @return a map contain the symptoms and their occurrences
+	 * @throws IOException when an input / output error occurs while reading
 	 */
-	public ReadSymptomDataFromFile (String filepath) {
-		this.filepath = filepath;
-	}
-	
+
 	@Override
-	public List<String> GetSymptoms() {
-		ArrayList<String> result = new ArrayList<String>();
-		
-		if (filepath != null) {
-			try {
-				BufferedReader reader = new BufferedReader (new FileReader(filepath));
-				String line = reader.readLine();
-				
-				while (line != null) {
-					result.add(line);
-					line = reader.readLine();
+	public Map<String, Integer> readSymptoms() throws IOException {
+		Map<String, Integer> counterSymptoms = new HashMap<>();
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
+
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+
+				String symptom = line.trim();
+
+					counterSymptoms.put(symptom, counterSymptoms.getOrDefault(symptom, 0) + 1);
+
 				}
-				reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+			return counterSymptoms;
 		}
-		
-		return result;
-	}
+
+
+    }
 
 }
+
