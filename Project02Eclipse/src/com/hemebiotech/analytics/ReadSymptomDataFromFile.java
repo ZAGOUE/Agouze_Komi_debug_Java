@@ -23,7 +23,7 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 
     public ReadSymptomDataFromFile(String fileName) {
 
-		this.fileName = "symptoms.txt";
+		this.fileName = fileName;
 
     }
 
